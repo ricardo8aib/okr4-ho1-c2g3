@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "snowlfake_hands_on"
+version = "0.1.0"
+description = "Snowflake hands on"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^1.10.2"
+pandas = "^1.5.0"
+python-dotenv = "^0.21.0"
+psycopg2 = "^2.9.3"
+boto3 = "^1.24.85"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
