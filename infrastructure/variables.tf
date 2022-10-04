@@ -22,3 +22,13 @@ variable "bucket_name" {
   type        = string
   description = "Name of the bucket"
 }
+
+variable "snowflake_access_policy" {
+  type        = string
+  description = "Snowflake access policy name"
+}
+
+variable "snowflake_access_role" {
+  type        = string
+  description = "Snowflake access role name"
+}
