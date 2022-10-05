@@ -24,6 +24,7 @@ if __name__ == "__main__":
         "olist_orders_dataset",
         "olist_products_dataset",
         "olist_sellers_dataset",
+        "product_category_name_translation"
     ]
 
     for table in tables:
