@@ -14,5 +14,6 @@ class Loader:
 
     def load_data(self, df: pd.DataFrame, path: str) -> None:
         csv_buffer = StringIO()
-        df.to_csv(csv_buffer)
-        self.s3_resource.Object(self.bucket, path).put(Body=csv_buffer.getvalue())
+        df.to_csv(csv_buffer, index=False)
+        body = csv_buffer.getvalue()
+        self.s3_resource.Object(self.bucket, path).put(Body=body)
