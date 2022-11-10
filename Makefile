@@ -12,10 +12,12 @@ format: ## Formats code
 .PHONY: create-infrastructure
 create-infrastructure: ## Create infrastructure
 	(cd infrastructure/; terraform init; terraform apply -auto-approve)
+	chmod 600 infrastructure/keys/*.pem
 
 .PHONY: destroy-infrastructure
 destroy-infrastructure: ## Destroy infrastructure
 	(cd infrastructure/; terraform destroy -auto-approve)
+	rm -rf infrastructure/keys/*.pem
 
 .PHONY: extract-data
 extract-data: ## Extract data
