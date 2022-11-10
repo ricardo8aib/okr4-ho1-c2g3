@@ -3,6 +3,11 @@ variable "profile" {
   description = "AWS profile to run Terraform"
 }
 
+variable "aws_account_id" {
+  type        = string
+  description = "AWS accoint id"
+}
+
 variable "region" {
   type        = string
   description = "Region to use for provisioning"
