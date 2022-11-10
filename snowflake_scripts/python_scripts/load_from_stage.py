@@ -3,7 +3,7 @@ from snowflake_scripts.config.aws_s3_config import S3Settings
 settings = S3Settings()
 
 create_file_format = f"""
-                    CREATE FILE FORMAT "OLIST"."STAGING".{settings.FILE_FORMAT}
+                    CREATE FILE FORMAT "{settings.DB_NAME}"."{settings.DB_SCHEMA}".{settings.FILE_FORMAT}
                     TYPE = 'CSV'
                     COMPRESSION = 'AUTO'
                     FIELD_DELIMITER = ','
@@ -15,8 +15,8 @@ create_file_format = f"""
                     ESCAPE = 'NONE'
                 """
 
-create_customers = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.OLIST_CUSTOMERS_DATASET (
+create_customers = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_CUSTOMERS_DATASET (
                         customer_id varchar(40),
                         customer_unique_id varchar(40),
                         customer_zip_code_prefix varchar(40),
@@ -25,8 +25,8 @@ create_customers = """
                     );
                 """
 
-create_geolocation = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.OLIST_GEOLOCATION_DATASET (
+create_geolocation = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_GEOLOCATION_DATASET (
                         geolocation_zip_code_prefix varchar(40),
                         geolocation_lat float,
                         geolocation_lng float,
@@ -36,8 +36,8 @@ create_geolocation = """
                 """
 
 
-create_order_items = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.OLIST_ORDER_ITEMS_DATASET (
+create_order_items = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_ITEMS_DATASET (
                         order_id varchar(40),
                         order_item_id integer,
                         product_id varchar(40),
@@ -48,8 +48,8 @@ create_order_items = """
                     );
                 """
 
-create_order_payments = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.OLIST_ORDER_PAYMENTS_DATASET (
+create_order_payments = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_PAYMENTS_DATASET (
                         order_id varchar(40),
                         payment_sequential integer,
                         payment_type varchar(40),
@@ -58,8 +58,8 @@ create_order_payments = """
                     );
                 """
 
-create_order_reviews = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.OLIST_ORDER_REVIEWS_DATASET (
+create_order_reviews = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_REVIEWS_DATASET (
                         review_id varchar(40),
                         order_id varchar(40),
                         review_score integer,
@@ -70,8 +70,8 @@ create_order_reviews = """
                     );
                 """
 
-create_order = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.OLIST_ORDER_DATASET (
+create_order = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_DATASET (
                         order_id varchar(40),
                         customer_id varchar(40),
                         order_status varchar(40),
@@ -83,8 +83,8 @@ create_order = """
                     );
                 """
 
-create_products = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.OLIST_PRODUCTS_DATASET (
+create_products = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_PRODUCTS_DATASET (
                         product_id varchar(40),
                         product_category_name varchar(40),
                         product_name_lenght integer,
@@ -97,8 +97,8 @@ create_products = """
                     );
                 """
 
-create_sellers = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.OLIST_SELLERS_DATASET (
+create_sellers = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_SELLERS_DATASET (
                         seller_id varchar(40),
                         seller_zip_code_prefix varchar(40),
                         seller_city varchar(40),
@@ -106,72 +106,81 @@ create_sellers = """
                     );
                 """
 
-create_name_translation = """
-                    CREATE OR REPLACE TABLE OLIST.STAGING.PRODUCT_CATEGORY_NAME_TRANSLATION (
+create_name_translation = f"""
+                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.PRODUCT_CATEGORY_NAME_TRANSLATION (
                         product_category_name varchar(40),
                         product_category_name_english varchar(40)
                     );
                 """
 
-copy_customers = """
-                    COPY INTO OLIST.STAGING.OLIST_CUSTOMERS_DATASET
-                    FROM @my_s3_stage
+copy_customers = f"""
+                    COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_CUSTOMERS_DATASET
+                    FROM @{settings.STAGE_NAME}
                     FILES = ('olist_customers_dataset.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+                    FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
 
-copy_geolocation = """
-                    COPY INTO OLIST.STAGING.OLIST_GEOLOCATION_DATASET
-                    FROM @my_s3_stage
+copy_geolocation = f"""
+                    COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_GEOLOCATION_DATASET
+                    FROM @{settings.STAGE_NAME}
                     FILES = ('olist_geolocation_dataset.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+                    FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
 
-copy_order_items = """
-                    COPY INTO OLIST.STAGING.OLIST_ORDER_ITEMS_DATASET
-                    FROM @my_s3_stage
+copy_order_items = f"""
+                    COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_ITEMS_DATASET
+                    FROM @{settings.STAGE_NAME}
                     FILES = ('olist_order_items_dataset.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+                    FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
 
-copy_order_payments = """
-                    COPY INTO OLIST.STAGING.OLIST_ORDER_PAYMENTS_DATASET
-                    FROM @my_s3_stage
+copy_order_payments = f"""
+                    COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_PAYMENTS_DATASET
+                    FROM @{settings.STAGE_NAME}
                     FILES = ('olist_order_payments_dataset.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+                    FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
 
-copy_order_reviews = """
-                    COPY INTO OLIST.STAGING.OLIST_ORDER_REVIEWS_DATASET
-                    FROM @my_s3_stage
+copy_order_reviews = f"""
+                    COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_REVIEWS_DATASET
+                    FROM @{settings.STAGE_NAME}
                     FILES = ('olist_order_reviews_dataset.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+                    FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
 
-copy_order = """
-                    COPY INTO OLIST.STAGING.OLIST_ORDER_DATASET
-                    FROM @my_s3_stage
+copy_order = f"""
+                    COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_DATASET
+                    FROM @{settings.STAGE_NAME}
                     FILES = ('olist_orders_dataset.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+                    FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
 
-copy_products = """
-                    COPY INTO OLIST.STAGING.OLIST_PRODUCTS_DATASET
-                    FROM @my_s3_stage
+copy_products = f"""
+                    COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_PRODUCTS_DATASET
+                    FROM @{settings.STAGE_NAME}
                     FILES = ('olist_products_dataset.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+                    FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
 
-copy_sellers = """
-                    COPY INTO OLIST.STAGING.OLIST_SELLERS_DATASET
-                    FROM @my_s3_stage
+copy_sellers = f"""
+                    COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_SELLERS_DATASET
+                    FROM @{settings.STAGE_NAME}
                     FILES = ('olist_sellers_dataset.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+                    FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
 
-copy_sname_translation = """
-                    COPY INTO OLIST.STAGING.PRODUCT_CATEGORY_NAME_TRANSLATION
-                    FROM @my_s3_stage
-                    FILES = ('product_category_name_translation.csv')
-                    FILE_FORMAT = (format_name='olist_tables_csv' );
+copy_sname_translation = f"""
+                COPY INTO {settings.DB_NAME}.{settings.DB_SCHEMA}.PRODUCT_CATEGORY_NAME_TRANSLATION
+                FROM @{settings.STAGE_NAME}
+                FILES = ('product_category_name_translation.csv')
+                FILE_FORMAT = (format_name='{settings.FILE_FORMAT}' );
                 """
+
+
+create_snowpipe_customers = f"""
+    create or replace pipe {settings.DB_NAME}.{settings.DB_SCHEMA}.customers_pipe
+    auto_ingest=true as
+    copy into {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_CUSTOMERS_DATASET
+    from @{settings.DB_NAME}.{settings.DB_SCHEMA}.{settings.STAGE_NAME}/raw/olist_customers_dataset/
+    file_format = (type='CSV' SKIP_HEADER=1);
+"""
