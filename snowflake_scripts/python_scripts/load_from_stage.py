@@ -3,7 +3,8 @@ from snowflake_scripts.config.aws_s3_config import S3Settings
 settings = S3Settings()
 
 create_file_format = f"""
-                    CREATE FILE FORMAT "{settings.DB_NAME}"."{settings.DB_SCHEMA}".{settings.FILE_FORMAT}
+                    CREATE FILE FORMAT
+                    "{settings.DB_NAME}"."{settings.DB_SCHEMA}".{settings.FILE_FORMAT}
                     TYPE = 'CSV'
                     COMPRESSION = 'AUTO'
                     FIELD_DELIMITER = ','
@@ -16,7 +17,8 @@ create_file_format = f"""
                 """
 
 create_customers = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_CUSTOMERS_DATASET (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_CUSTOMERS_DATASET (
                         customer_id varchar(40),
                         customer_unique_id varchar(40),
                         customer_zip_code_prefix varchar(40),
@@ -26,7 +28,8 @@ create_customers = f"""
                 """
 
 create_geolocation = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_GEOLOCATION_DATASET (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_GEOLOCATION_DATASET (
                         geolocation_zip_code_prefix varchar(40),
                         geolocation_lat float,
                         geolocation_lng float,
@@ -37,7 +40,8 @@ create_geolocation = f"""
 
 
 create_order_items = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_ITEMS_DATASET (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_ITEMS_DATASET (
                         order_id varchar(40),
                         order_item_id integer,
                         product_id varchar(40),
@@ -49,7 +53,8 @@ create_order_items = f"""
                 """
 
 create_order_payments = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_PAYMENTS_DATASET (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_PAYMENTS_DATASET (
                         order_id varchar(40),
                         payment_sequential integer,
                         payment_type varchar(40),
@@ -59,7 +64,8 @@ create_order_payments = f"""
                 """
 
 create_order_reviews = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_REVIEWS_DATASET (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_REVIEWS_DATASET (
                         review_id varchar(40),
                         order_id varchar(40),
                         review_score integer,
@@ -71,7 +77,8 @@ create_order_reviews = f"""
                 """
 
 create_order = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_DATASET (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_ORDER_DATASET (
                         order_id varchar(40),
                         customer_id varchar(40),
                         order_status varchar(40),
@@ -84,7 +91,8 @@ create_order = f"""
                 """
 
 create_products = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_PRODUCTS_DATASET (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_PRODUCTS_DATASET (
                         product_id varchar(40),
                         product_category_name varchar(40),
                         product_name_lenght integer,
@@ -98,7 +106,8 @@ create_products = f"""
                 """
 
 create_sellers = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_SELLERS_DATASET (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.OLIST_SELLERS_DATASET (
                         seller_id varchar(40),
                         seller_zip_code_prefix varchar(40),
                         seller_city varchar(40),
@@ -107,7 +116,8 @@ create_sellers = f"""
                 """
 
 create_name_translation = f"""
-                    CREATE OR REPLACE TABLE {settings.DB_NAME}.{settings.DB_SCHEMA}.PRODUCT_CATEGORY_NAME_TRANSLATION (
+                    CREATE OR REPLACE TABLE
+                    {settings.DB_NAME}.{settings.DB_SCHEMA}.PRODUCT_CATEGORY_NAME_TRANSLATION (
                         product_category_name varchar(40),
                         product_category_name_english varchar(40)
                     );

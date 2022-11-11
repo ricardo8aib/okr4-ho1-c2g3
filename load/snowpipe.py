@@ -7,7 +7,7 @@ from config.snowflake_config import SnowflakeSettings
 path_root = Path(__file__).parents[1]
 sys.path.append(str(path_root))
 
-from snowflake_scripts.python_scripts.load_from_stage import create_snowpipe
+from snowflake_scripts.python_scripts.load_from_stage import create_snowpipe_customers
 
 
 def create_pipe(settings: SnowflakeSettings):
@@ -25,7 +25,7 @@ def create_pipe(settings: SnowflakeSettings):
     with connection.cursor() as cursor:
         cursor = connection.cursor()
         try:
-            cursor.execute(create_snowpipe)
+            cursor.execute(create_snowpipe_customers)
         except Exception as e:
             print(e)
 
@@ -34,4 +34,4 @@ def create_pipe(settings: SnowflakeSettings):
 
 if __name__ == "__main__":
     snowflake_settings = SnowflakeSettings()
-    generate_file_format(snowflake_settings)
+    create_pipe(snowflake_settings)

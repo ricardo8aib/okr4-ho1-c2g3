@@ -8,8 +8,9 @@ path_root = Path(__file__).parents[1]
 sys.path.append(str(path_root))
 
 from snowflake_scripts.python_scripts.storage_integration import (
-    create_integration, create_stage, grant_create_stage, grant_usage,
-    list_stage, use_database, use_schema)
+    create_integration,
+    use_database
+)
 
 
 def create_storage_integration(settings: SnowflakeSettings):
