@@ -1,13 +1,15 @@
-from airflow import DAG
 from datetime import datetime, timedelta
-from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
+
+from airflow import DAG
+from airflow.providers.airbyte.operators.airbyte import \
+    AirbyteTriggerSyncOperator
 
 with DAG(
-        dag_id="ExtractAndLoad",
-        schedule_interval="@daily",
-        start_date=datetime(2022, 9, 9),
-        dagrun_timeout=timedelta(minutes=30),
-        catchup=False
+    dag_id="ExtractAndLoad",
+    schedule_interval="@daily",
+    start_date=datetime(2022, 9, 9),
+    dagrun_timeout=timedelta(minutes=30),
+    catchup=False,
 ) as dag:
 
     rds_to_s3_task = AirbyteTriggerSyncOperator(

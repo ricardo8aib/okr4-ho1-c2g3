@@ -9,6 +9,7 @@ sys.path.append(str(path_root))
 
 from snowflake_scripts.python_scripts.load_from_stage import create_file_format
 
+
 def generate_file_format(settings: SnowflakeSettings):
     """Create file format
 
