@@ -7,17 +7,16 @@ from config.snowflake_config import SnowflakeSettings
 path_root = Path(__file__).parents[1]
 sys.path.append(str(path_root))
 
-from snowflake_scripts.python_scripts.storage_integration import (
-    create_integration, use_database)
+from snowflake_scripts.python_scripts.load_from_stage import \
+    create_snowpipe_customers
 
 
-def create_storage_integration(settings: SnowflakeSettings):
-    """Create the storage integration
+def create_pipe(settings: SnowflakeSettings):
+    """Create snowflake pipe
 
     Args:
         settings (SnowflakeSettings): Snowflake settings object
     """
-
     connection = snowflake.connector.connect(
         user=settings.SNOWFLAKE_USER,
         password=settings.SNOWFLAKE_PASSWORD.get_secret_value(),
@@ -27,8 +26,7 @@ def create_storage_integration(settings: SnowflakeSettings):
     with connection.cursor() as cursor:
         cursor = connection.cursor()
         try:
-            cursor.execute(use_database)
-            cursor.execute(create_integration)
+            cursor.execute(create_snowpipe_customers)
         except Exception as e:
             print(e)
 
@@ -37,4 +35,4 @@ def create_storage_integration(settings: SnowflakeSettings):
 
 if __name__ == "__main__":
     snowflake_settings = SnowflakeSettings()
-    create_storage_integration(snowflake_settings)
+    create_pipe(snowflake_settings)

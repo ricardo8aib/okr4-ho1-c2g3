@@ -32,7 +32,7 @@ use_schema = f"""
             """
 
 create_stage = f"""
-                    create stage {settings.STAGE_NAME}
+                    create or replace stage {settings.STAGE_NAME}
                         storage_integration = {settings.INTEGRATION_NAME}
                         url = '{data_path}'
                         file_format = {settings.FILE_FORMAT};
