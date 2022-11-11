@@ -7,7 +7,8 @@ from config.snowflake_config import SnowflakeSettings
 path_root = Path(__file__).parents[1]
 sys.path.append(str(path_root))
 
-from snowflake_scripts.python_scripts.load_from_stage import create_snowpipe_customers
+from snowflake_scripts.python_scripts.load_from_stage import \
+    create_snowpipe_customers
 
 
 def create_pipe(settings: SnowflakeSettings):
