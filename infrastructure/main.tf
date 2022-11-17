@@ -1,6 +1,6 @@
 # S3 Bucket
 resource "aws_s3_bucket" "staging_bucket" {
-  bucket = "${var.bucket_name}"
+  bucket = var.bucket_name
 
   tags = {
     Name    = "${var.project}-${var.group_name}"
@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "staging_bucket" {
 
 # IAM Role to let Snowflake access to the S3 bucket
 resource "aws_iam_role" "snowflake_role" {
-  name = "${var.snowflake_access_role}"
+  name = var.snowflake_access_role
 
   assume_role_policy = <<EOF
 {
@@ -83,7 +83,7 @@ resource "aws_security_group" "astronomer_security_group" {
     project = var.project
   }
 
-ingress {
+  ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -135,16 +135,22 @@ resource "aws_instance" "astronomer_instance" {
     cd /home/ubuntu
 
     sudo apt update
-    sudo snap install docker
+    sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt update
+    sudo apt install docker-ce -y
 
-    curl -L "https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
+    sudo mkdir -p ~/.docker/cli-plugins/
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+    sudo chmod +x ~/.docker/cli-plugins/docker-compose
 
-    sudo curl -sSL install.astronomer.io | sudo bash -s
-    sudo mkdir okr4-astronomer
-    cd okr4-astronomer/
-    sudo astro dev init
-    sudo astro dev start
+    sudo curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.4.3/docker-compose.yaml'
+    sudo mkdir -p ./dags ./logs ./plugins
+    sudo echo -e "AIRFLOW_UID=$(id -u)" > .env
+
+    sudo docker compose up airflow-init
+    sudo docker compose up -d
 
   EOF
 
@@ -164,7 +170,7 @@ resource "aws_security_group" "airbyte_security_group" {
     project = var.project
   }
 
-ingress {
+  ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -207,7 +213,7 @@ resource "aws_key_pair" "aws_key_pair_airbyte" {
 resource "aws_instance" "airbyte_instance" {
 
   ami                    = "ami-052efd3df9dad4825"
-  instance_type          = "t2.large"
+  instance_type          = "t2.small"
   vpc_security_group_ids = [aws_security_group.airbyte_security_group.id]
   key_name               = aws_key_pair.aws_key_pair_airbyte.key_name
   user_data              = <<-EOF
